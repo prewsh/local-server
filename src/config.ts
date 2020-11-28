@@ -22,7 +22,7 @@ const config: Config = {
       target: 'https://api.github.com/graphql',
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `Token ${process.env.API_KEY}`,
+        Authorization: `Bearer ${process.env.API_KEY}`,
       },
       body: JSON.stringify({
         query: `
