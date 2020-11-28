@@ -14,32 +14,43 @@ export interface Proxy extends Options {
 }
 
 const config: Config = {
-  allowedDomains: ['https://www.mauriciorobayo.com'],
+  allowedDomains: ['https://prewsh.github.io/git-profile'],
   proxies: [
     {
-      route: '/weather',
-      allowedMethods: ['GET'],
-      target: 'https://api.openweathermap.org/data/2.5/weather',
-      queryparams: {
-        appid: process.env.WEATHER_API_KEY,
-      },
-    },
-    {
-      route: '/ipinfo',
-      allowedMethods: ['GET'],
-      target: 'https://ipinfo.io/',
-      queryparams: {
-        token: process.env.IPINFO_TOKEN,
-      },
-    },
-    {
-      route: '/github',
-      allowedMethods: ['GET'],
-      target: 'https://api.github.com',
+      route: '/graphql',
+      allowedMethods: ['POST'],
+      target: 'https://api.github.com/graphql',
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `Token ${process.env.GITHUB_TOKEN}`,
+        Authorization: `Token ${process.env.API_KEY}`,
       },
+      body: JSON.stringify({
+        query: `
+        query { 
+            viewer {
+                login
+                bio
+                email
+                avatarUrl
+                following {
+                    totalCount
+                  }
+                followers {
+                    totalCount
+                  }
+                name
+                websiteUrl
+                twitterUsername
+                repositories(orderBy: {field: CREATED_AT, direction: DESC}, first: 20) {
+                  nodes {
+                    name
+                    description
+                  }
+                }
+              }
+          }
+        `
+    })
     },
   ],
 };
